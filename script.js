@@ -21,6 +21,15 @@ const scores = [0, 0];
 let currentScore = 0;
 let activePlayer = 0;
 
+//function to switch player
+const switchPlayer = function() {
+    document.getElementById(`current--${activePlayer}`).textContent = 0;
+    currentScore = 0;
+    activePlayer = activePlayer === 0 ? 1 : 0;
+    player0El.classList.toggle('player--active');
+    player1El.classList.toggle('player--active');
+};
+
 // Rolling dice functionality
 btnRoll.addEventListener('click', function() {
     //1. generating a random dice roll
@@ -38,11 +47,28 @@ btnRoll.addEventListener('click', function() {
         document.getElementById(`current--${activePlayer}`).textContent = currentScore;
     } else {
         //Swich to next palyer if the active player is 0 then switch to player 1 but if player is one switch to player zero then set score to zero
-        document.getElementById(`current--${activePlayer}`).textContent = 0;
-        currentScore = 0;
-        activePlayer = activePlayer === 0 ? 1 : 0;
-        player0El.classList.toggle('player--active');
-        player1El.classList.toggle('player--active');
+        switchPlayer();
     }
 });
+
+btnHold.addEventListener('click', function() {
+    //1.add current score to active players score
+    scores[activePlayer] += currentScore;
+    // scores[1] = scores[1] + currentScore 
+    document.getElementById(`score--${activePlayer}`).textContent = scores[activePlayer];
+
+    //2.check score is >= 100
+    if(scores[activePlayer] >= 20) {
+        //finish the game
+        document.querySelector(`.player--${activePlayer}`).classList.add('player--winner');
+        document.querySelector(`.player--${activePlayer}`).classList.remove('player--active');
+    } else {
+        //switch to the next player
+        switchPlayer();
+
+    }
+
+});
+
+//when using query selectors you must use . to select the class getElementById does not need .
         
